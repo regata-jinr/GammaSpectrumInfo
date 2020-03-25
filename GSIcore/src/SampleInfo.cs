@@ -7,6 +7,7 @@ namespace GSI.Core
     {
         public SampleInfo(IDataAccess spectra)
         {
+            ErrorMessage  = "";
             Title         = spectra.Param[ParamCodes.CAM_T_STITLE].ToString();
             CollectorName = spectra.Param[ParamCodes.CAM_T_SCOLLNAME].ToString();
             Id            = spectra.Param[ParamCodes.CAM_T_SIDENT].ToString();
@@ -23,18 +24,24 @@ namespace GSI.Core
             Description   += $"{spectra.Param[ParamCodes.CAM_T_SDESC3]} ";
             Description   += spectra.Param[ParamCodes.CAM_T_SDESC4];
 
-            float.TryParse(spectra.Param[ParamCodes.CAM_T_SGEOMTRY].ToString(),    out Geometry);
-            DateTime.TryParse(spectra.Param[ParamCodes.CAM_X_STIME].ToString(),    out EndDate);
-            DateTime.TryParse(spectra.Param[ParamCodes.CAM_X_SDEPOSIT].ToString(), out BeginDate);
-            float.TryParse(spectra.Param[ParamCodes.CAM_F_SQUANTERR].ToString(),   out Uncertainty);
-            float.TryParse(spectra.Param[ParamCodes.CAM_F_SQUANT].ToString(),      out Quantity);
+            if (!float.TryParse(spectra.Param[ParamCodes.CAM_T_SGEOMTRY].ToString(), out Geometry))
+                ErrorMessage += "Can't parse geometry value; ";
+            if (!DateTime.TryParse(spectra.Param[ParamCodes.CAM_X_STIME].ToString(), out EndDate))
+                ErrorMessage += "Can't parse end of irradiation date value; ";
+            if (!DateTime.TryParse(spectra.Param[ParamCodes.CAM_X_SDEPOSIT].ToString(), out BeginDate))
+                ErrorMessage += "Can't parse begin of irradiation date value; ";
+            if (!float.TryParse(spectra.Param[ParamCodes.CAM_F_SQUANTERR].ToString(), out Uncertainty))
+                ErrorMessage += "Can't parse uncertainty value; ";
+            if (!float.TryParse(spectra.Param[ParamCodes.CAM_F_SQUANT].ToString(), out Quantity))
+                ErrorMessage += "Can't parse quantity value;";
         }
 
-        public readonly string   Title;
         public readonly string   Id;
+        public readonly string   Title;
         public readonly string   CollectorName;
         public readonly string   Type;
         public readonly string   Description;
+        public readonly string   ErrorMessage;
         public readonly float    Quantity;
         public readonly float    Uncertainty;
         public readonly string   Units;
@@ -45,7 +52,7 @@ namespace GSI.Core
 
         public override string ToString()
         {
-            return String.Format($"{Id,-15}|{Title,-5}|{Type,-5}|{BeginDate,-20}|{EndDate, -20}|{Quantity,-7}|{Uncertainty,-3}|{Units,-5}|{Geometry,-4}");
+            return String.Format($"{Id,-15}|{Title,-5}|{CollectorName,-15}|{Type,-5}|{BeginDate,-20}|{EndDate, -20}|{Quantity,-7}|{Uncertainty,-3}|{Units,-5}|{Geometry,-4}|{Description}");
         }
 
     }
