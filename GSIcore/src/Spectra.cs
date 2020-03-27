@@ -20,7 +20,7 @@ namespace GSI.Core
             {
                 FileName = pathToCnf;
                 _spectra = new DataAccess();
-                _spectra.Open(pathToCnf);
+                _spectra.Open(pathToCnf, OpenMode.dReadWrite);
 
                 Sample = new SampleInfo(_spectra);
 

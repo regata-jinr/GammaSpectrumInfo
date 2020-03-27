@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Interop.CanberraDataAccessLib">
+      <HintPath>C:\GENIE2K\S560\VCSharp\VCSharp\bin\Release\Interop.CanberraDataAccessLib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

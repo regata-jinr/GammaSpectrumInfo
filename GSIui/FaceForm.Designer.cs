@@ -101,8 +101,7 @@
             this.FaceFormDataGridViewMain.Size = new System.Drawing.Size(1164, 589);
             this.FaceFormDataGridViewMain.TabIndex = 1;
             this.FaceFormDataGridViewMain.ReadOnly = true;
-            this.FaceFormDataGridViewMain.AllowUserToResizeColumns = false;
-            this.FaceFormDataGridViewMain.AllowUserToResizeRows = false;
+            //this.FaceFormDataGridViewMain.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             // 
             // ToolStripMenuItemMenuChoseSpectra
             // 

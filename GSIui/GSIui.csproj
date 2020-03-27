@@ -9,6 +9,7 @@
       <HintPath>C:\GENIE2K\S560\VCSharp\VCSharp\bin\Release\Interop.CanberraDataAccessLib.dll</HintPath>
       <Private>true</Private>
     </Reference>
+    <None Include="labels.json" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
   <PropertyGroup>

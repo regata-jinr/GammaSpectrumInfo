@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using GSI.Core;
+
 
 namespace GSI.UI
 {
@@ -18,7 +15,10 @@ namespace GSI.UI
     // TODO: add lib for install that will check dotnetcore runtime installation
     // TODO: fix all sample titles for all spectras 
     // TODO: add benchmark and find out when(how many files should be) use parallel
-    // FIXME: click to dgv crash the app
+    // TODO: add async and parallel processing (it should add files when read one ...)
+    // TODO: add files to existing
+    // TODO: clear table
+    // FIXME: click to dgv crash the app | upd: the problem in current cell, it null and can't be initialised
 
     public partial class FaceForm : Form
     {
@@ -29,16 +29,30 @@ namespace GSI.UI
         {
             InitializeComponent();
 
-            var spectra = new Spectra(@"D:\Spectra\1207256.cnf");
-
             _viewModels = new List<ViewModel>();
             _missedFiles = new StringBuilder($"These files were skipped:{Environment.NewLine}");
 
             FaceFormButtonExportCSV.Click += FaceFormButtonExportCSV_Click;
             ToolStripMenuItemMenuChoseSpectra.Click += ToolStripMenuItemMenuChoseSpectra_Click;
 
+            FaceFormDataGridViewMain.CellClick += FaceFormDataGridViewMain_CellClick;
+            FaceFormDataGridViewMain.CellMouseClick += FaceFormDataGridViewMain_CellMouseClick; ;
             FaceFormDataGridViewMain.DataSource = _viewModels;
 
+        } 
+
+        private void FaceFormDataGridViewMain_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (FaceFormDataGridViewMain.CurrentCell == null || 
+                FaceFormDataGridViewMain.CurrentCell.Value == null ||
+                e.RowIndex == -1) return;
+        }
+
+        private void FaceFormDataGridViewMain_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (FaceFormDataGridViewMain.CurrentCell == null ||
+                FaceFormDataGridViewMain.CurrentCell.Value == null ||
+                e.RowIndex == -1) return;
         }
 
         private void ToolStripMenuItemMenuChoseSpectra_Click(object sender, EventArgs e)
@@ -58,7 +72,6 @@ namespace GSI.UI
         {
             FaceFormDataGridViewMain.DataSource = null;
             FaceFormDataGridViewMain.DataSource = _viewModels;
-            
         }
 
         private void FaceFormButtonExportCSV_Click(object sender, EventArgs e)
