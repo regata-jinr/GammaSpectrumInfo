@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using GSI.Core;
 
@@ -9,6 +11,9 @@ namespace GSI.UI
 {
     // TODO: parse selected spectra to list of object
     // TODO: bind list to data source of dgv
+    // TODO: add deadtime
+    // TODO: add duration
+    // TODO: add duration type
     // TODO: add csvhelper
     // TODO: add labels.json for language settings
     // TODO: add tests
@@ -38,6 +43,7 @@ namespace GSI.UI
             FaceFormDataGridViewMain.CellClick += FaceFormDataGridViewMain_CellClick;
             FaceFormDataGridViewMain.CellMouseClick += FaceFormDataGridViewMain_CellMouseClick; ;
             FaceFormDataGridViewMain.DataSource = _viewModels;
+            //FaceFormDataGridViewMain.DataSource = null;
 
         } 
 
@@ -55,17 +61,29 @@ namespace GSI.UI
                 e.RowIndex == -1) return;
         }
 
-        private void ToolStripMenuItemMenuChoseSpectra_Click(object sender, EventArgs e)
+        // TODO: how to fill dgv partially, i.e. after processing bunch of files or each files the result should be added to dgv
+        // TODO: how to update dgv from side thread?
+
+        private async void ToolStripMenuItemMenuChoseSpectra_Click(object sender, EventArgs e)
         {
             if (FaceFormOpenSpectraFileDialog.ShowDialog() == DialogResult.Cancel)
                 return;
             else
             {
-                foreach (var file in FaceFormOpenSpectraFileDialog.FileNames)
-                    _viewModels.Add((new Spectra(file)).viewModel);
-
+                //foreach (var file in FaceFormOpenSpectraFileDialog.FileNames)
+                await ProcessFilesTask(FaceFormOpenSpectraFileDialog.FileNames);
+                //_viewModels.Add((new Spectra(file)).viewModel);
                 FillDataGridView();
             }
+        }
+
+        private Task ProcessFilesTask(string[] files)
+        {
+            return Task.Run(() =>
+           {
+               foreach (var file in FaceFormOpenSpectraFileDialog.FileNames)
+                   _viewModels.Add((new Spectra(file)).viewModel);
+           });
         }
 
         private void FillDataGridView()
