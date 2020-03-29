@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GSI.Core;
-
+using System.Threading;
 
 namespace GSI.UI
 {
@@ -27,21 +28,25 @@ namespace GSI.UI
 
     public partial class FaceForm : Form
     {
-        private readonly List<ViewModel> _viewModels;
+        private readonly BindingList<ViewModel> _viewModels;
         private readonly StringBuilder _missedFiles;
+        private readonly List<string> _files;
+        private CancellationTokenSource _cts;
 
         public FaceForm()
         {
             InitializeComponent();
 
-            _viewModels = new List<ViewModel>();
+            _viewModels = new BindingList<ViewModel>();
+            _files = new List<string>();
             _missedFiles = new StringBuilder($"These files were skipped:{Environment.NewLine}");
 
             FaceFormButtonExportCSV.Click += FaceFormButtonExportCSV_Click;
-            ToolStripMenuItemMenuChoseSpectra.Click += ToolStripMenuItemMenuChoseSpectra_Click;
+            //ToolStripMenuItemMenuChoseSpectra.Click += ToolStripMenuItemMenuChoseSpectra_Click;
+            ToolStripMenuItemMenuChoseSpectra.Click += ToolStripMenuItemMenuChoseSpectra_ClickAsync;
 
             FaceFormDataGridViewMain.CellClick += FaceFormDataGridViewMain_CellClick;
-            FaceFormDataGridViewMain.CellMouseClick += FaceFormDataGridViewMain_CellMouseClick; ;
+            FaceFormDataGridViewMain.CellMouseClick += FaceFormDataGridViewMain_CellMouseClick; 
             FaceFormDataGridViewMain.DataSource = _viewModels;
             //FaceFormDataGridViewMain.DataSource = null;
 
@@ -64,34 +69,73 @@ namespace GSI.UI
         // TODO: how to fill dgv partially, i.e. after processing bunch of files or each files the result should be added to dgv
         // TODO: how to update dgv from side thread?
 
-        private async void ToolStripMenuItemMenuChoseSpectra_Click(object sender, EventArgs e)
+        //private void ToolStripMenuItemMenuChoseSpectra_Click(object sender, EventArgs e)
+        //{
+        //    if (FaceFormOpenSpectraFileDialog.ShowDialog() == DialogResult.Cancel)
+        //        return;
+        //    else
+        //    {
+        //        foreach (var file in FaceFormOpenSpectraFileDialog.FileNames)
+        //            _viewModels.Add((new Spectra(file)).viewModel);
+        //        //FillDataGridView();
+        //    }
+        //}
+
+        private async void ToolStripMenuItemMenuChoseSpectra_ClickAsync(object sender, EventArgs e)
         {
             if (FaceFormOpenSpectraFileDialog.ShowDialog() == DialogResult.Cancel)
                 return;
             else
             {
-                //foreach (var file in FaceFormOpenSpectraFileDialog.FileNames)
-                await ProcessFilesTask(FaceFormOpenSpectraFileDialog.FileNames);
-                //_viewModels.Add((new Spectra(file)).viewModel);
-                FillDataGridView();
+                _cts = new CancellationTokenSource();
+                try
+                {
+                    _files.AddRange(FaceFormOpenSpectraFileDialog.FileNames);
+                    await FillDataGridView(_cts.Token);
+                    //resultsTextBox.Text += "\r\nDownloads complete.";
+                }
+                catch (OperationCanceledException)
+                {
+                    //resultsTextBox.Text += "\r\nDownloads canceled.\r\n";
+                }
+                catch (Exception)
+                {
+                    //resultsTextBox.Text += "\r\nDownloads failed.\r\n";
+                }
+                _cts = null;
             }
         }
 
-        private Task ProcessFilesTask(string[] files)
+        private void cancelButton_Click(object sender, EventArgs e)
         {
-            return Task.Run(() =>
-           {
-               foreach (var file in FaceFormOpenSpectraFileDialog.FileNames)
-                   _viewModels.Add((new Spectra(file)).viewModel);
-           });
+            if (_cts != null)
+            {
+                _cts.Cancel();
+            }
         }
 
-        private void FillDataGridView()
+        private async Task FillDataGridView(CancellationToken ct)
         {
-            FaceFormDataGridViewMain.DataSource = null;
-            FaceFormDataGridViewMain.DataSource = _viewModels;
+
+            List<Task<ViewModel>> ProcessFileTasks = _files.Select(file => ProcessFile(file, ct)).ToList();
+
+            while (ProcessFileTasks.Any())
+            {
+                Task<ViewModel> completedTask = await Task.WhenAny(ProcessFileTasks);
+
+                ProcessFileTasks.Remove(completedTask);
+
+                _viewModels.Add(await completedTask);
+            }
         }
 
+        private async Task<ViewModel> ProcessFile(string file, CancellationToken ct)
+        {
+            return await Task.FromResult<ViewModel>(new Spectra(file).viewModel);
+
+        }
+
+      
         private void FaceFormButtonExportCSV_Click(object sender, EventArgs e)
         {
             throw new NotImplementedException();
