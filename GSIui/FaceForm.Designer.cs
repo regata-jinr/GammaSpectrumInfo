@@ -35,7 +35,8 @@
             this.ToolStripMenuItemMenuLangEng = new System.Windows.Forms.ToolStripMenuItem();
             this.FaceFormDataGridViewMain = new System.Windows.Forms.DataGridView();
             this.ToolStripMenuItemMenuChoseSpectra = new System.Windows.Forms.ToolStripMenuItem();
-            this.FaceFormButtonExportCSV = new System.Windows.Forms.Button();
+            this.FaceFormButtonStart = new System.Windows.Forms.Button();
+            this.FaceFormButtonCancel = new System.Windows.Forms.Button();
             this.FaceFormOpenSpectraFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.FaceFormMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FaceFormDataGridViewMain)).BeginInit();
@@ -101,6 +102,7 @@
             this.FaceFormDataGridViewMain.Size = new System.Drawing.Size(1164, 589);
             this.FaceFormDataGridViewMain.TabIndex = 1;
             this.FaceFormDataGridViewMain.ReadOnly = true;
+            this.FaceFormDataGridViewMain.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
             //this.FaceFormDataGridViewMain.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             // 
             // ToolStripMenuItemMenuChoseSpectra
@@ -108,17 +110,28 @@
             this.ToolStripMenuItemMenuChoseSpectra.Name = "ToolStripMenuItemMenuChoseSpectra";
             this.ToolStripMenuItemMenuChoseSpectra.Size = new System.Drawing.Size(215, 22);
             this.ToolStripMenuItemMenuChoseSpectra.Text = "Выбрать файлы спектров";
+           // 
+            // FaceFormButtonStart
             // 
-            // FaceFormButtonExportCSV
+            this.FaceFormButtonStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.FaceFormButtonStart.Location = new System.Drawing.Point(664, 42);
+            this.FaceFormButtonStart.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.FaceFormButtonStart.Name = "FaceFormButtonStart";
+            this.FaceFormButtonStart.Size = new System.Drawing.Size(218, 35);
+            this.FaceFormButtonStart.TabIndex = 2;
+            this.FaceFormButtonStart.Text = "Пуск";
+            this.FaceFormButtonStart.UseVisualStyleBackColor = true;
             // 
-            this.FaceFormButtonExportCSV.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.FaceFormButtonExportCSV.Location = new System.Drawing.Point(964, 42);
-            this.FaceFormButtonExportCSV.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.FaceFormButtonExportCSV.Name = "FaceFormButtonExportCSV";
-            this.FaceFormButtonExportCSV.Size = new System.Drawing.Size(218, 35);
-            this.FaceFormButtonExportCSV.TabIndex = 2;
-            this.FaceFormButtonExportCSV.Text = "Экспортировать в CSV";
-            this.FaceFormButtonExportCSV.UseVisualStyleBackColor = true;
+            // FaceFormButtonCancel
+            // 
+            this.FaceFormButtonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.FaceFormButtonCancel.Location = new System.Drawing.Point(333, 42);
+            this.FaceFormButtonCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.FaceFormButtonCancel.Name = "FaceFormButtonCancel";
+            this.FaceFormButtonCancel.Size = new System.Drawing.Size(218, 35);
+            this.FaceFormButtonCancel.TabIndex = 2;
+            this.FaceFormButtonCancel.Text = "Отмена";
+            this.FaceFormButtonStart.UseVisualStyleBackColor = true;
             // 
             // FaceFormOpenSpectraFileDialog
             // 
@@ -136,7 +149,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1200, 692);
-            this.Controls.Add(this.FaceFormButtonExportCSV);
+            this.Controls.Add(this.FaceFormButtonStart);
+            this.Controls.Add(this.FaceFormButtonCancel);
             this.Controls.Add(this.FaceFormDataGridViewMain);
             this.Controls.Add(this.FaceFormMenuStrip);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -161,7 +175,8 @@
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemMenuLangEng;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemMenuChoseSpectra;
         private System.Windows.Forms.DataGridView FaceFormDataGridViewMain;
-        private System.Windows.Forms.Button FaceFormButtonExportCSV;
+        private System.Windows.Forms.Button FaceFormButtonStart;
+        private System.Windows.Forms.Button FaceFormButtonCancel;
         private System.Windows.Forms.OpenFileDialog FaceFormOpenSpectraFileDialog;
     }
 }
