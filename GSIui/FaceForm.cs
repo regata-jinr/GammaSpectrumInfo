@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -9,9 +10,6 @@ using System.Threading;
 
 namespace GSI.UI
 {
-    // TODO: add deadtime
-    // TODO: add duration
-    // TODO: add duration type
     // TODO: add csvhelper
     // TODO: add labels.json for language settings
     // TODO: add tests
@@ -21,8 +19,9 @@ namespace GSI.UI
     // TODO: add clear button
     // TODO: add result text box for status or status strip?
     // TODO: add text box for displaying the number of non processed files?
-    // TODO: ignore duplicates
+    // TODO: ignore duplicates should be on file adding step
     // TODO: sort by sample title
+    // TODO: don't forget to check scalability (now buttons don't have symmetry)
     // BUG: double click start will double result table
 
     public partial class FaceForm : Form
@@ -35,7 +34,6 @@ namespace GSI.UI
             InitializeComponent();
 
             _viewModels = new BindingList<ViewModel>();
-
             ToolStripMenuItemMenuChoseSpectra.Click += ToolStripMenuItemMenuChoseSpectra_ClickAsync;
             FaceFormButtonStart.Click += FaceFormButtonStart_Click;
             FaceFormButtonCancel.Click += cancelButton_Click;
@@ -45,7 +43,7 @@ namespace GSI.UI
 
         private async void FaceFormButtonStart_Click(object sender, EventArgs e)
         {
-            // HACK: FaceFormOpenSpectraFileDialog.FileNames couldn't be empty
+            FaceFormButtonStart.Enabled = false;
             if (FaceFormOpenSpectraFileDialog.FileNames[0] == "FaceFormOpenSpectraFileDialog") ToolStripMenuItemMenuChoseSpectra_ClickAsync(sender, e);
 
             _cts = new CancellationTokenSource();
@@ -65,6 +63,7 @@ namespace GSI.UI
                 //resultsTextBox.Text += "\r\nDownloads failed.\r\n";
             }
             _cts = null;
+            FaceFormButtonStart.Enabled = true;
         }
 
         private void ToolStripMenuItemMenuChoseSpectra_ClickAsync(object sender, EventArgs e)

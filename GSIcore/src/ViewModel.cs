@@ -13,6 +13,8 @@ namespace GSI.Core
         public float    Uncertainty   { get; set; }
         public string   Units         { get; set; }
         public float    Geometry      { get; set; }
+        public decimal  Duration      { get; set; }
+        public decimal  DeadTime      { get; set; }
         public string   BuildUpType   { get; set; }
         public DateTime BeginDate     { get; set; }
         public DateTime EndDate       { get; set; }

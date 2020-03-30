@@ -9,6 +9,8 @@ namespace GSI.Core
         private IDataAccess _spectra;
 
         public readonly string FileName;
+        public readonly decimal DeadTime;
+        public readonly decimal Duration;
 
         public string ErrorMessage;
 
@@ -23,6 +25,15 @@ namespace GSI.Core
                 _spectra.Open(pathToCnf, OpenMode.dReadWrite);
 
                 Sample = new SampleInfo(_spectra);
+                decimal ElapsedLiveTime = 0;
+
+                if (!decimal.TryParse(_spectra.Param[ParamCodes.CAM_X_ELIVE].ToString(), out ElapsedLiveTime))
+                    ErrorMessage += "Can't parse ElapsedLiveTime value; ";
+                
+                if (!decimal.TryParse(_spectra.Param[ParamCodes.CAM_X_EREAL].ToString(), out Duration))
+                    ErrorMessage += "Can't parse Duration value; ";
+
+                DeadTime = (Duration == 0) ? 0 : Math.Round(100 * (1 - ElapsedLiveTime / Duration), 2);
 
                 if (string.IsNullOrEmpty(Sample.ErrorMessage))
                     ReadSuccess = true;
@@ -68,6 +79,8 @@ namespace GSI.Core
                     Uncertainty   = this.Sample.Uncertainty,
                     Units         = this.Sample.Units,
                     Geometry      = this.Sample.Geometry,
+                    Duration      = Duration,
+                    DeadTime      = DeadTime,
                     BuildUpType   = this.Sample.BuildUpType,
                     BeginDate     = this.Sample.BeginDate,
                     EndDate       = this.Sample.EndDate,
