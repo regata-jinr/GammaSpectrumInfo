@@ -18,10 +18,10 @@ using System.Threading;
 
 namespace GSI.UI
 {
-    // TODO: add tests
     // TODO: add lib for install that will check dotnetcore runtime installation
-    // TODO: can user add custom parameters to table by paramCode?
     // TODO: add github workflows for ci/cd (check installation and tests on independent platform and create github release)
+    // FIXME: for test I have to install dotnet.exe x86 see: https://github.com/xunit/xunit/issues/1123
+    // TODO: can user add custom parameters to table by paramCode?
 
     public partial class FaceForm : Form
     {

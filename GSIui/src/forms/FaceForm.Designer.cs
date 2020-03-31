@@ -1,4 +1,14 @@
-﻿namespace GSI.UI
+﻿/***************************************************************************
+ *                                                                         *
+ *                                                                         *
+ * Copyright(c) 2020, REGATA Experiment at FLNP|JINR                       *
+ * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
+ * All rights reserved                                                     *
+ *                                                                         *
+ *                                                                         *
+ ***************************************************************************/
+
+namespace GSI.UI
 {
     partial class FaceForm
     {
