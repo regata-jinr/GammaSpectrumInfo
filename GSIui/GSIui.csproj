@@ -20,6 +20,7 @@
     <StartupObject>GSI.UI.Program</StartupObject>
     <RootNamespace>GSI.UI</RootNamespace>
     <AssemblyName>GammaSpectrumInfo</AssemblyName>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
 </Project>

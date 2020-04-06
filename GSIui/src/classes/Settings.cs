@@ -22,6 +22,7 @@ namespace GSI
 
     public class Settings
     {
+        private static bool _isFirstreading = true;
         private Languages _currentLanguage;
         private string _path = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\Regata\\{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}\\settings.json";
 
@@ -31,11 +32,32 @@ namespace GSI
             {
                 return _currentLanguage;
             }
-                set
+            set
             {
                 _currentLanguage = value;
                 Labels.CurrentLanguage = _currentLanguage;
                 SaveSettings();
+            }
+        }
+
+        private void ReadSettings()
+        {
+            try
+            {
+                if (_isFirstreading)
+                {
+                    _isFirstreading = false; // this fix stack overflow in json desirialize bellow
+                    if (File.Exists(_path))
+                    {
+                        var options = new JsonSerializerOptions();
+                        options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+                        _currentLanguage = JsonSerializer.Deserialize<Settings>(File.ReadAllText(_path), options).CurrentLanguage;
+                    }
+                }
+            }
+            catch (JsonException)
+            {
+                ResetFileSettings();
             }
         }
 
@@ -46,26 +68,12 @@ namespace GSI
             { }
             
             CurrentLanguage = Languages.English;
-            SaveSettings();
         }
 
         public Settings()
         {
-            try
-            {
-                if (File.Exists(_path))
-                {
-                    var options = new JsonSerializerOptions();
-                    options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
-                    CurrentLanguage = JsonSerializer.Deserialize<Settings>(File.ReadAllText(_path), options).CurrentLanguage;
-                }
-                else
-                    ResetFileSettings();
-            }
-            catch (JsonException)
-            {
-                ResetFileSettings();
-            }
+            ReadSettings();
+           
         }
 
         public void SaveSettings()
@@ -510,6 +518,21 @@ namespace GSI
                         return "Успешно прочитан";
                     case Languages.English:
                         return "Read successfully";
+                    default: return "";
+                }
+            }
+        }
+
+        public static string ErrorMessage
+        {
+            get
+            {
+                switch (CurrentLanguage)
+                {
+                    case Languages.Russian:
+                        return "Сообщение об ошибке";
+                    case Languages.English:
+                        return "Error message";
                     default: return "";
                 }
             }
