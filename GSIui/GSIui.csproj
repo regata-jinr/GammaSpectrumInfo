@@ -9,12 +9,6 @@
       <HintPath>C:\GENIE2K\S560\VCSharp\VCSharp\bin\Release\Interop.CanberraDataAccessLib.dll</HintPath>
       <Private>true</Private>
     </Reference>
-    <None Include="labels.json" CopyToOutputDirectory="Always" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.3" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.3" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -22,6 +16,10 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <PlatformTarget>x86</PlatformTarget>
     <UseWindowsForms>true</UseWindowsForms>
+    <Platforms>AnyCPU;x86</Platforms>
+    <StartupObject>GSI.UI.Program</StartupObject>
+    <RootNamespace>GSI.UI</RootNamespace>
+    <AssemblyName>GammaSpectrumInfo</AssemblyName>
   </PropertyGroup>
 
 </Project>

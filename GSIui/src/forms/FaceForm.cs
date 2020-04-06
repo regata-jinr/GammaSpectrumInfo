@@ -19,6 +19,12 @@ using System.Threading;
 namespace GSI.UI
 {
     // TODO: add lib for install that will check dotnetcore runtime installation
+    // TODO: check if dotnet runtime is absent install it. the same for msix.
+    // TODO: unify start program pathes for all regata software: Regata -> GammaSpectrumInfo
+    // TODO: prepare icons
+    // TODO: remove old programs and clean pathes
+    // TODO: test it on win7 vm
+    // TODO: prepare README
     // TODO: add github workflows for ci/cd (check installation and tests on independent platform and create github release)
     // FIXME: for test I have to install dotnet.exe x86 see: https://github.com/xunit/xunit/issues/1123
     // TODO: can user add custom parameters to table by paramCode?
@@ -27,13 +33,15 @@ namespace GSI.UI
     {
         private readonly BindingList<ViewModel> _viewModels;
         private CancellationTokenSource _cts;
-        private string lang = ConfigurationManager.Language;
+        private Settings _settings;
 
         public FaceForm()
         {
             InitializeComponent();
 
-            if (lang == "eng")
+            _settings = new Settings();
+
+            if (Labels.CurrentLanguage == Languages.English)
                 ToolStripMenuItemMenuLangEng.Checked = true;
             else
                 ToolStripMenuItemMenuLangRus.Checked = true;
@@ -48,7 +56,7 @@ namespace GSI.UI
             ToolStripMenuItemMenuLangEng.CheckedChanged += LangStripMenuItem_CheckedChanged;
             ToolStripMenuItemMenuLangRus.CheckedChanged += LangStripMenuItem_CheckedChanged;
 
-            Utilities.ChangeFormLanguage(this, lang);
+            Utilities.ChangeFormLanguage(this);
         }
 
         private async void FaceFormButtonStart_Click(object sender, EventArgs e)
@@ -60,7 +68,8 @@ namespace GSI.UI
                 return;
 
             FaceFormButtonStart.Enabled = false;
-            FaceFormButtonStart.Text = ConfigurationManager.config[$"Continuation:{lang}"];
+            Labels.CurrentStatus = Status.Processing;
+            FaceFormButtonStart.Text = Utilities.GetValueOfSetting(FaceFormButtonStart.Name);
             var isCancelled = false;
 
             _isCleared = false;
@@ -73,6 +82,7 @@ namespace GSI.UI
             {
                 FaceFormToolStripStatusLabel.Text = oe.Message;
                 isCancelled = true;
+                Labels.CurrentStatus = Status.Canceled;
             }
             catch (Exception ex)
             {
@@ -82,12 +92,13 @@ namespace GSI.UI
 
             if (!isCancelled)
             {
-                FaceFormButtonStart.Text = ConfigurationManager.config[$"{FaceFormButtonStart.Name}:{lang}"];
-                FaceFormToolStripStatusLabel.Text = ConfigurationManager.config[$"{FaceFormToolStripStatusLabel.Name}:Success:{lang}"];
+                Labels.CurrentStatus = Status.Success;
+                FaceFormButtonStart.Text = Utilities.GetValueOfSetting(FaceFormButtonStart.Name);
+                FaceFormToolStripStatusLabel.Text = Utilities.GetValueOfSetting(FaceFormToolStripStatusLabel.Name);
             }
             else
             {
-                FaceFormToolStripStatusLabel.Text = ConfigurationManager.config[$"{FaceFormToolStripStatusLabel.Name}:Canceled:{lang}"];
+                FaceFormToolStripStatusLabel.Text = Utilities.GetValueOfSetting(FaceFormToolStripStatusLabel.Name);
             }
             _cts = null;
         }
@@ -96,9 +107,11 @@ namespace GSI.UI
         {
             if (FaceFormOpenSpectraFileDialog.ShowDialog() == DialogResult.Cancel)
                 return;
+
+            Labels.CurrentStatus = Status.Info;
             FaceFormToolStripProgressBar.Value = 0;
             FaceFormToolStripProgressBar.Maximum = FaceFormOpenSpectraFileDialog.FileNames.Length;
-            FaceFormToolStripStatusLabel.Text = $"{ConfigurationManager.config[$"{FaceFormToolStripStatusLabel.Name}:Info:{lang}"]} {FaceFormToolStripProgressBar.Maximum.ToString()}";
+            FaceFormToolStripStatusLabel.Text = $"{Utilities.GetValueOfSetting(FaceFormToolStripStatusLabel.Name)} {FaceFormToolStripProgressBar.Maximum.ToString()}";
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
@@ -122,7 +135,8 @@ namespace GSI.UI
 
         private void InsertToTheRightPlace(ViewModel currentfile)
         {
-            FaceFormToolStripStatusLabel.Text = $"{currentfile.File} {ConfigurationManager.config[$"{FaceFormToolStripStatusLabel.Name}:Processing:{lang}"]}";
+            Labels.CurrentStatus = Status.Processing;
+            FaceFormToolStripStatusLabel.Text = $"{currentfile.File} {Utilities.GetValueOfSetting(FaceFormToolStripStatusLabel.Name)}";
             if (!_viewModels.Any())
             {
                 _viewModels.Add(currentfile);
@@ -169,16 +183,16 @@ namespace GSI.UI
 
             if (langStrip.Checked && langStrip.Name == ToolStripMenuItemMenuLangEng.Name)
             {
-                lang = "eng";
+                _settings.CurrentLanguage = Languages.English;
                 ToolStripMenuItemMenuLangRus.Checked = false;
             }
 
             if (langStrip.Checked && langStrip.Name == ToolStripMenuItemMenuLangRus.Name)
             {
-                lang = "rus";
+                _settings.CurrentLanguage = Languages.Russian;
                 ToolStripMenuItemMenuLangEng.Checked = false;
             }
-            Utilities.ChangeFormLanguage(this, lang);
+            Utilities.ChangeFormLanguage(this);
         }
 
     } //  public partial class FaceForm : Form

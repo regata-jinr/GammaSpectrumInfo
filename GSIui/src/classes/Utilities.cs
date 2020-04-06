@@ -8,23 +8,17 @@
  *                                                                         *
  ***************************************************************************/
 
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Windows.Forms;
-using System.Text;
-using System.IO;
 
 namespace GSI
 {
-   internal static class Utilities
-   {
-        private static string lang;
-        public static void ChangeFormLanguage(Form form, string language)
+    internal static class Utilities
+    {
+        public static void ChangeFormLanguage(Form form)
         {
-            ConfigurationManager.Language = language;
-            lang = language;
             var vers = form.GetType().Assembly.GetName().Version;
-            form.Text = $"{ConfigurationManager.config[$"{form.Name}:{lang}"]} - {vers.Major.ToString()}.{vers.Minor.ToString()}.{vers.Build.ToString()}";
+            form.Text = $"{Labels.FaceForm} - {vers.Major.ToString()}.{vers.Minor.ToString()}.{vers.Build.ToString()}";
 
             SetLanguageToControls(form.Controls);
         }
@@ -35,26 +29,31 @@ namespace GSI
                 SetLanguageToObject(cont);
         }
 
+        public static string GetValueOfSetting(string name)
+        {
+            return typeof(Labels).GetProperty(name).GetValue(null).ToString();
+        }
+
         private static void SetLanguageToObject(object cont)
         {
             switch (cont)
             {
                 case GroupBox grpb:
-                    grpb.Text = ConfigurationManager.config[$"{grpb.Name}:{lang}"];
+                    grpb.Text = GetValueOfSetting(grpb.Name);
                     SetLanguageToControls(grpb.Controls);
                     break;
 
                 case TabControl tbcont:
                     foreach (TabPage page in tbcont.TabPages)
                     {
-                        page.Text = ConfigurationManager.config[$"{page.Name}:{lang}"];
+                        page.Text = GetValueOfSetting(page.Name);
                         SetLanguageToControls(page.Controls);
                     }
                     break;
 
                 case DataGridView dgv:
                     foreach (DataGridViewColumn col in dgv.Columns)
-                        col.HeaderText = ConfigurationManager.config[$"{col.Name}:{lang}"];
+                        col.HeaderText = GetValueOfSetting(col.Name);
                     break;
 
                 case MenuStrip ms:
@@ -63,7 +62,7 @@ namespace GSI
                     break;
 
                 case ToolStripMenuItem tsi:
-                    tsi.Text = ConfigurationManager.config[$"{tsi.Name}:{lang}"];
+                    tsi.Text = GetValueOfSetting(tsi.Name);
                     foreach (ToolStripMenuItem innerTsi in tsi.DropDownItems)
                         SetLanguageToObject(innerTsi);
                     break;
@@ -72,7 +71,7 @@ namespace GSI
                     var getName = cont.GetType().GetProperty("Name").GetGetMethod();
                     var setText = cont.GetType().GetProperty("Text").GetSetMethod();
 
-                    setText.Invoke(cont, new object[] { ConfigurationManager.config[$"{getName.Invoke(cont, null)}:{lang}"] });
+                    setText.Invoke(cont, new object[] { GetValueOfSetting(getName.Invoke(cont, null).ToString()) });
                     break;
 
                 case null:
@@ -81,43 +80,4 @@ namespace GSI
         }
     } // internal static class Utilities
 
-    internal class ConfigurationManager
-    {
-        public static readonly IConfiguration config;
-
-        static ConfigurationManager()
-        {
-            config = new ConfigurationBuilder().
-                           SetBasePath(AppContext.BaseDirectory).
-                           AddJsonFile("labels.json").
-                           Build();
-            _lang = config["language"];
-        }
-        private static string _lang;
-        public static string Language
-        {
-           get { return _lang; }
-           set
-            {
-                if (value != "rus" && value != "eng")
-                    _lang = "eng";
-                else
-                {
-                    if (_lang != value)
-                    {
-                        var prev = _lang;
-                        _lang = value;
-                        UpdateConfigFile(prev);
-                    }
-                }
-            }
-        }
-
-        private static void UpdateConfigFile(string prev)
-        {
-            var jsonString = new StringBuilder(File.ReadAllText("labels.json"));
-            jsonString.Replace($"\"language\": \"{prev}\"", $"\"language\": \"{_lang}\"");
-            File.WriteAllText("labels.json", jsonString.ToString());
-        }
-    } // internal class ConfigurationManager
 } // namespace GSI.Utilities
