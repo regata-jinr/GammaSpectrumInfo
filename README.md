@@ -40,5 +40,5 @@ First of all you have to choose spectra files. You can do it via Menu button:
 
 Or in case of no-one file selected, you can click to Start button. It allows you to choose spectra and start processing immediately: 
 
-![5]("GSIui/Resources/GSIDemo.gif")
+![5](GSIui/Resources/GSIDemo.gif)
 
