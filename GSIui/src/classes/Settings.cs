@@ -159,7 +159,6 @@ namespace GSI
                 switch (CurrentLanguage)
                 {
                     case Languages.Russian:
-
                         return "Выбрать файлы спектров";
                     case Languages.English:
                         return "Choose spectra files";
@@ -172,14 +171,53 @@ namespace GSI
         {
             get
             {
-                switch (CurrentLanguage)
+                switch (CurrentStatus)
                 {
-                    case Languages.Russian:
-
-                        return "Пуск";
-                    case Languages.English:
-                        return "Start";
-                    default: return "";
+                    case Status.Info:
+                        switch (CurrentLanguage)
+                        {
+                            case Languages.Russian:
+                                return "Пуск";
+                            case Languages.English:
+                                return "Start";
+                            default: return "";
+                        }
+                    case Status.Processing:
+                        switch (CurrentLanguage)
+                        {
+                            case Languages.Russian:
+                                return "Продолжить";
+                            case Languages.English:
+                                return "Continue";
+                            default: return "";
+                        }
+                    case Status.Canceled:
+                        switch (CurrentLanguage)
+                        {
+                            case Languages.Russian:
+                                return "Продолжить";
+                            case Languages.English:
+                                return "Continue";
+                            default: return "";
+                        }
+                    case Status.Success:
+                        switch (CurrentLanguage)
+                        {
+                            case Languages.Russian:
+                                return "Пуск";
+                            case Languages.English:
+                                return "Start";
+                            default: return "";
+                        }
+                    default:
+                        switch (CurrentLanguage)
+                        {
+                            case Languages.Russian:
+                                return "Пуск";
+                            case Languages.English:
+                                return "Start";
+                            default: return "";
+                        }
                 }
             }
         }

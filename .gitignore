@@ -765,3 +765,6 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 /AppInstallerFileBuilder/PhotoStore.msix
+*.ico
+GSIPackage/
+GSIPackage/*

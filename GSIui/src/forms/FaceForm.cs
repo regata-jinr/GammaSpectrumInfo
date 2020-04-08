@@ -18,15 +18,21 @@ using System.Threading;
 
 namespace GSI.UI
 {
+    // TODO: what files I can put into github?
     // TODO: add lib for install that will check dotnetcore runtime installation
     // TODO: check if dotnet runtime is absent install it. the same for msix.
     // TODO: unify start program pathes for all regata software: Regata -> GammaSpectrumInfo
-    // TODO: prepare icons
+    // TODO: prepare icons:
+    // TODO:    make it more readable in small size
+    // TODO:    perhaps solution is for small size use only feather, but for medium combine with logo
+    // TODO:    add icon to application not only package
+
     // TODO: remove old programs and clean pathes
     // TODO: test it on win7 vm
     // TODO: prepare README
     // TODO: add github workflows for ci/cd (check installation and tests on independent platform and create github release)
     // FIXME: for test I have to install dotnet.exe x86 see: https://github.com/xunit/xunit/issues/1123
+    // TODO: add sort by any columnt
     // TODO: can user add custom parameters to table by paramCode?
 
     public partial class FaceForm : Form
@@ -175,6 +181,8 @@ namespace GSI.UI
             FaceFormToolStripStatusLabel.Text = "";
             _isCleared = true;
             FaceFormToolStripProgressBar.Value = 0;
+            Labels.CurrentStatus = Status.Info;
+            FaceFormButtonStart.Text = Utilities.GetValueOfSetting(FaceFormButtonStart.Name);
         }
      
         private void LangStripMenuItem_CheckedChanged(object sender, EventArgs e)

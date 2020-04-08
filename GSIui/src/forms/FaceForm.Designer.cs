@@ -38,6 +38,7 @@ namespace GSI.UI
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FaceForm));
             this.FaceFormMenuStrip = new System.Windows.Forms.MenuStrip();
             this.ToolStripMenuItemMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemMenuLang = new System.Windows.Forms.ToolStripMenuItem();
@@ -210,6 +211,8 @@ namespace GSI.UI
             this.Controls.Add(this.FaceFormDataGridViewMain);
             this.Controls.Add(this.FaceFormMenuStrip);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("GammaSpectrumInfo")));
+
             this.MainMenuStrip = this.FaceFormMenuStrip;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "FaceForm";
