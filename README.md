@@ -42,3 +42,7 @@ Or in case of no-one file selected, you can click to Start button. It allows you
 
 ![5](GSIui/Resources/GSIDemo.gif)
 
+In case of you want to work with and analyse this information you can just select all (ctrl+a) and copy (ctrl-v) to any editor, e.g. excel:
+
+![6](GSIui/Resources/GSIExportToExcel.gif)
+
