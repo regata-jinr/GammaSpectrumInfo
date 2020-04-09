@@ -75,6 +75,7 @@ jobs:
         $currentDirectory = Get-Location
         $certificatePath = Join-Path -Path $currentDirectory -ChildPath $env:Wap_Project_Directory -AdditionalChildPath $env:SigningCertificate
         [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
+
     # Build the Windows Application Packaging project
     - name: Build the Windows Application Packaging Project (wapproj)
       run: msbuild $env:Solution_Path /p:Platform=$env:TargetPlatform /p:Configuration=$env:Configuration /p:UapAppxPackageBuildMode=$env:BuildMode /p:AppxBundle=$env:AppxBundle /p:PackageCertificateKeyFile=$env:SigningCertificate /p:PackageCertificatePassword=${{ secrets.Pfx_Key }}
@@ -91,32 +92,39 @@ jobs:
       run: Remove-Item -path $env:Wap_Project_Directory\$env:SigningCertificate
 
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-artifact
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v1
-      with:
-        name: MSIX Package
-        path: ${{ env.Wap_Project_Directory }}\${{ env.App_Packages_Directory }}
+#    - name: Upload build artifacts
+#      uses: actions/upload-artifact@v1
+#      with:
+#        name: MSIX Package
+#        path: ${{ env.Wap_Project_Directory }}\${{ env.App_Packages_Directory }}
 
     # Create the release:  https://github.com/actions/create-release
-#    - name: Create release
-#      id: create_release
-#      uses: actions/create-release@v1
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-#      with:
-#        tag_name: ${{ github.ref}}.${{matrix.ChannelName}}.${{ matrix.targetplatform }}
-#        release_name:  ${{ github.ref }}.${{ matrix.ChannelName }}.${{ matrix.targetplatform }}
-#        draft: false
-#        prerelease: false
+    - name: Create release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: v${{ env.NBGV_SimpleVersion }}
+        release_name: release draft
+        draft: true
+        prerelease: false
+#       body: commit message?
+    
+    - run: ls ${{ env.Wap_Project_Directory }}\${{ env.App_Packages_Directory }}
+      
+    - run: ls ${{ env.Wap_Project_Directory }}\${{ env.App_Packages_Directory }}\${{ env.Wap_Project_Directory }}_${{ env.NBGV_SimpleVersion }}.0_${{ matrix.targetplatform }}_Test
+
+#    - run: Compress-Archive -Path ${{ env.Wap_Project_Directory }}\${{ env.App_Packages_Directory }}\${{ env.Wap_Project_Directory }}_${{ env.NBGV_SimpleVersion }}.0_${{ matrix.targetplatform }}_Test\${{ env.Wap_Project_Directory }}_${{ env.NBGV_SimpleVersion }}.0_${{ matrix.targetplatform }}.appx -Destination ${{ env.Wap_Project_Directory }}\${{ env.Wap_Project_Directory }}_${{ env.NBGV_SimpleVersion }}.0_${{ matrix.targetplatform }}.zip
 
     # Upload release asset:   https://github.com/actions/upload-release-asset
-#    - name: Update release asset
-#      id: upload-release-asset
-#      uses: actions/upload-release-asset@v1
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      with:
-#        upload_url: ${{ steps.create_release.outputs.upload_url }}  # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-#        asset_path: ${{ env.Wap_Project_Directory }}\${{ env.App_Packages_Directory }}\${{ env.App_Packages_Archive }}
-#        asset_name: ${{ env.App_Packages_Archive }}
-#        asset_content_type: application/zip
+    - name: Update release asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}  # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: ${{ env.Wap_Project_Directory }}\${{ env.App_Packages_Directory }}\${{ env.Wap_Project_Directory }}_${{ env.NBGV_SimpleVersion }}.0_${{ matrix.targetplatform }}_Test\${{ env.Wap_Project_Directory }}_${{ env.NBGV_SimpleVersion }}.0_${{ matrix.targetplatform }}.appx
+        asset_name: ${{ env.Wap_Project_Directory }}_${{ env.NBGV_SimpleVersion }}.0_${{ matrix.targetplatform }}.appx
+        asset_content_type: application/exe
