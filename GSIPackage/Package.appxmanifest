@@ -9,11 +9,11 @@
   <Identity
     Name="f89ce8cc-a1a8-4753-bc57-efd8e7e49019"
     Publisher="CN=bdrum"
-    Version="1.1.14.0" />
+    Version="1.1.17.0" />
 
   <Properties>
-    <DisplayName>GSIPackage</DisplayName>
-    <PublisherDisplayName>bdrum</PublisherDisplayName>
+    <DisplayName>GammaSpectrumInfo</DisplayName>
+    <PublisherDisplayName>Regata</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
 

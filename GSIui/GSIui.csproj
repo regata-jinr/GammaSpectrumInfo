@@ -41,6 +41,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <PlatformTarget>x86</PlatformTarget>
     <UseWindowsForms>true</UseWindowsForms>
+    <RuntimeIdentifiers>win-x86</RuntimeIdentifiers>
     <Platforms>AnyCPU;x86</Platforms>
     <StartupObject>GSI.UI.Program</StartupObject>
     <RootNamespace>GSI.UI</RootNamespace>
