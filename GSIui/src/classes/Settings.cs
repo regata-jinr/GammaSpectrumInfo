@@ -9,6 +9,7 @@
  ***************************************************************************/
 
 using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.IO;
@@ -36,9 +37,10 @@ namespace GSI
             {
                 _currentLanguage = value;
                 Labels.CurrentLanguage = _currentLanguage;
-                SaveSettings();
             }
         }
+
+        public IList<string> NonDisplayedColumns { get; set; }
 
         private void ReadSettings()
         {
@@ -51,8 +53,14 @@ namespace GSI
                     {
                         var options = new JsonSerializerOptions();
                         options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
-                        _currentLanguage = JsonSerializer.Deserialize<Settings>(File.ReadAllText(_path), options).CurrentLanguage;
+                        var set = JsonSerializer.Deserialize<Settings>(File.ReadAllText(_path), options);
+                        _currentLanguage = set.CurrentLanguage;
+                        NonDisplayedColumns = set.NonDisplayedColumns;
+                        if (NonDisplayedColumns == null)
+                            NonDisplayedColumns = new List<string>();
                     }
+                    else
+                        ResetFileSettings();
                 }
             }
             catch (JsonException)
@@ -68,12 +76,12 @@ namespace GSI
             { }
             
             CurrentLanguage = Languages.English;
+            NonDisplayedColumns = new List<string>();
         }
 
         public Settings()
         {
             ReadSettings();
-           
         }
 
         public void SaveSettings()
@@ -316,6 +324,39 @@ namespace GSI
         }
 
         public static string statusStrip1 { get { return ""; } }
+
+        public static string ToolStripMenuItemViewShowColumns { 
+            get
+            {
+                switch (CurrentLanguage)
+                {
+                    case Languages.Russian:
+                        return "Показывать столбцы";
+                    case Languages.English:
+                        return "Show columns";
+                    default:
+                        return "Show columns";
+                }
+            }
+        }
+
+        public static string ToolStripMenuItemView
+        {
+            get
+            {
+                switch (CurrentLanguage)
+                {
+                    case Languages.Russian:
+                        return "Вид";
+                    case Languages.English:
+                        return "View";
+                    default:
+                        return "View";
+                }
+            }
+        }
+
+
 
         #endregion
 

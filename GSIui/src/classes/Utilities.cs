@@ -31,7 +31,7 @@ namespace GSI
 
         public static string GetValueOfSetting(string name)
         {
-            return typeof(Labels).GetProperty(name).GetValue(null).ToString();
+            return typeof(Labels).GetProperty(name)?.GetValue(null).ToString();
         }
 
         private static void SetLanguageToObject(object cont)

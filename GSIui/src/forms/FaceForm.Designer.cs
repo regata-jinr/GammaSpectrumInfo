@@ -53,6 +53,8 @@ namespace GSI.UI
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.FaceFormToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.FaceFormToolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.ToolStripMenuItemView = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItemViewShowColumns = new System.Windows.Forms.ToolStripMenuItem();
             this.FaceFormMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FaceFormDataGridViewMain)).BeginInit();
             this.statusStrip1.SuspendLayout();
@@ -62,7 +64,8 @@ namespace GSI.UI
             // 
             this.FaceFormMenuStrip.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FaceFormMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ToolStripMenuItemMenu});
+            this.ToolStripMenuItemMenu,
+            this.ToolStripMenuItemView});
             this.FaceFormMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.FaceFormMenuStrip.Name = "FaceFormMenuStrip";
             this.FaceFormMenuStrip.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
@@ -108,6 +111,20 @@ namespace GSI.UI
             this.ToolStripMenuItemMenuChoseSpectra.Name = "ToolStripMenuItemMenuChoseSpectra";
             this.ToolStripMenuItemMenuChoseSpectra.Size = new System.Drawing.Size(255, 24);
             this.ToolStripMenuItemMenuChoseSpectra.Text = "Выбрать файлы спектров";
+            // 
+            // ToolStripMenuItemView
+            // 
+            this.ToolStripMenuItemView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ToolStripMenuItemViewShowColumns});
+            this.ToolStripMenuItemView.Name = "ToolStripMenuItemView";
+            this.ToolStripMenuItemView.Size = new System.Drawing.Size(47, 24);
+            this.ToolStripMenuItemView.Text = "Вид";
+            // 
+            // ToolStripMenuItemViewShowColumns
+            // 
+            this.ToolStripMenuItemViewShowColumns.Name = "ToolStripMenuItemViewShowColumns";
+            this.ToolStripMenuItemViewShowColumns.Size = new System.Drawing.Size(224, 24);
+            this.ToolStripMenuItemViewShowColumns.Text = "Показывать столбцы";
             // 
             // FaceFormDataGridViewMain
             // 
@@ -243,6 +260,8 @@ namespace GSI.UI
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel FaceFormToolStripStatusLabel;
         private System.Windows.Forms.ToolStripProgressBar FaceFormToolStripProgressBar;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemView;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemViewShowColumns;
     }
 }
 

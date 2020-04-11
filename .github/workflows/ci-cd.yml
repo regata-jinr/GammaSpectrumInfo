@@ -111,12 +111,6 @@ jobs:
         prerelease: false
 #       body: commit message?
     
-    - run: ls ${{ env.Wap_Project_Directory }}\${{ env.App_Packages_Directory }}
-      
-    - run: ls ${{ env.Wap_Project_Directory }}\${{ env.App_Packages_Directory }}\${{ env.Wap_Project_Directory }}_${{ env.NBGV_SimpleVersion }}.0_${{ matrix.targetplatform }}_Test
-
-#    - run: Compress-Archive -Path ${{ env.Wap_Project_Directory }}\${{ env.App_Packages_Directory }}\${{ env.Wap_Project_Directory }}_${{ env.NBGV_SimpleVersion }}.0_${{ matrix.targetplatform }}_Test\${{ env.Wap_Project_Directory }}_${{ env.NBGV_SimpleVersion }}.0_${{ matrix.targetplatform }}.appx -Destination ${{ env.Wap_Project_Directory }}\${{ env.Wap_Project_Directory }}_${{ env.NBGV_SimpleVersion }}.0_${{ matrix.targetplatform }}.zip
-
     # Upload release asset:   https://github.com/actions/upload-release-asset
     - name: Update release asset
       id: upload-release-asset

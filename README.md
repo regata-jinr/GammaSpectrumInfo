@@ -1,5 +1,7 @@
 # Gamma spectrum info
 
+![GSI CI](https://github.com/regata-jinr/GammaSpectrumInfo/workflows/GSI%20CI/badge.svg)
+
 This application allows to user get the info from spectra files and group it into a table.
 
 This is the list of values from spectra that will be show:

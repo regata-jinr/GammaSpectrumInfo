@@ -23,6 +23,7 @@ namespace GSI.UI
     // TODO: find out how to run appx on clean system. test via sandbox and win7 vm
     // TODO: check if dotnet runtime is absent install it. the same for msix
     // TODO: remove old programs and clean pathes
+    // TODO: add timestamping to packaging in actions
     // TODO: add sort by any columnt
     // TODO: can user add custom parameters to table by paramCode?
 
@@ -53,7 +54,9 @@ namespace GSI.UI
             ToolStripMenuItemMenuLangEng.CheckedChanged += LangStripMenuItem_CheckedChanged;
             ToolStripMenuItemMenuLangRus.CheckedChanged += LangStripMenuItem_CheckedChanged;
 
+
             Utilities.ChangeFormLanguage(this);
+            InitializeMenuViewShowColumns();
         }
 
         private async void FaceFormButtonStart_Click(object sender, EventArgs e)
@@ -193,6 +196,42 @@ namespace GSI.UI
                 ToolStripMenuItemMenuLangEng.Checked = false;
             }
             Utilities.ChangeFormLanguage(this);
+            InitializeMenuViewShowColumns();
+            _settings.SaveSettings();
+        }
+
+        private void InitializeMenuViewShowColumns()
+        {
+            ToolStripMenuItemViewShowColumns.DropDownItems.Clear();
+            foreach (DataGridViewColumn col in FaceFormDataGridViewMain.Columns)
+            {
+                var t = new ToolStripMenuItem { Name = col.Name, Text = col.HeaderText, CheckOnClick = true, Checked = true};
+
+                if (_settings.NonDisplayedColumns.Contains(t.Name))
+                {
+                    t.Checked = false;
+                    col.Visible = false;
+                }
+                t.CheckedChanged += ShowColumns_CheckedChanged;
+                ToolStripMenuItemViewShowColumns.DropDownItems.AddRange(new ToolStripMenuItem[1] {t});
+
+            }
+        }
+
+        private void ShowColumns_CheckedChanged(object sender, EventArgs e)
+        {
+            var t = sender as ToolStripMenuItem;
+
+            if (!t.Checked)
+                _settings.NonDisplayedColumns.Add(t.Name);
+            else
+            {
+                if (_settings.NonDisplayedColumns.Contains(t.Name))
+                    _settings.NonDisplayedColumns.Remove(t.Name);
+            }
+            _settings.SaveSettings();
+
+            FaceFormDataGridViewMain.Columns[t.Name].Visible = t.Checked;
         }
 
     } //  public partial class FaceForm : Form
