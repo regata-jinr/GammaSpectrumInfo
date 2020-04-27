@@ -9,6 +9,7 @@
  ***************************************************************************/
 
 using System;
+using System.Reflection;
 using System.Linq;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -36,8 +37,9 @@ namespace GSI.UI
         public FaceForm()
         {
             InitializeComponent();
-
             _settings = new Settings();
+
+            Text = $"Gamma Spectrum Info - {Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version}";
 
             if (Labels.CurrentLanguage == Languages.English)
                 ToolStripMenuItemMenuLangEng.Checked = true;

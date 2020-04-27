@@ -17,8 +17,6 @@ namespace GSI
     {
         public static void ChangeFormLanguage(Form form)
         {
-            var vers = form.GetType().Assembly.GetName().Version;
-            form.Text = $"{Labels.FaceForm} - {vers.Major.ToString()}.{vers.Minor.ToString()}.{vers.Build.ToString()}";
 
             SetLanguageToControls(form.Controls);
         }

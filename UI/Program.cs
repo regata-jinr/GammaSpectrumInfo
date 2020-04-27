@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
+//[assembly: System.Reflection.Version("1.3.1")]
 
 namespace GSI.UI
 {

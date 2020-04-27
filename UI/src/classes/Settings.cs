@@ -19,7 +19,7 @@ namespace GSI
     public enum Status { Info, Processing, Success, Canceled };
     public enum Languages { Russian, English };
 
-    // NOTE: perhaps internal localization tools in winforms is better, but how I iderstood it doesn't allow to switch language in runtime.s
+    // NOTE: perhaps internal localization tools in winforms is better, but how I iderstood it doesn't allow to switch language during the runtime
 
     public class Settings
     {
@@ -107,7 +107,7 @@ namespace GSI
                 switch (CurrentLanguage)
                 {
                     case Languages.Russian:
-                        return "Меню";
+                        return "Menu";
                     case Languages.English:
                         return "Menu";
                     default: return "";
@@ -122,7 +122,7 @@ namespace GSI
                 switch (CurrentLanguage)
                 {
                     case Languages.Russian:
-                        return "Язык";
+                        return "Language";
                     case Languages.English:
                         return "Language";
                     default: return "";
@@ -137,7 +137,7 @@ namespace GSI
                 switch (CurrentLanguage)
                 {
                     case Languages.Russian:
-                        return "Русский";
+                        return "Russian";
                     case Languages.English:
                         return "Russian";
                     default: return "";
@@ -260,20 +260,13 @@ namespace GSI
             }
         }
 
-        public static string FaceForm
-        {
-            get
-            {
-                switch (CurrentLanguage)
-                {
-                    case Languages.Russian:
-                        return "GammaSpectrumInfo";
-                    case Languages.English:
-                        return "GammaSpectrumInfo";
-                    default: return "";
-                }
-            }
-        }
+        //public static string FaceForm
+        //{
+        //    get
+        //    {
+        //        return $"{Labels.FaceForm} - {vers.Major.ToString()}.{vers.Minor.ToString()}.{vers.Build.ToString()}";
+        //    }
+        //}
 
         public static string FaceFormToolStripStatusLabel
         {

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <ItemGroup>
-    <ProjectReference Include="..\GSIcore\GSIcore.csproj" />
+    <ProjectReference Include="..\Core\GSIcore.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -53,8 +53,11 @@
     <StartupObject>GSI.UI.Program</StartupObject>
     <RootNamespace>GSI.UI</RootNamespace>
     <AssemblyName>GammaSpectrumInfo</AssemblyName>
-    <Version>1.4.0</Version>
     <ApplicationIcon>GammaSpectrumInfo.ico</ApplicationIcon>
+    <AssemblyFileVersion>1.3.4.0</AssemblyFileVersion>
+    <AssemblyVersion>1.3.4.0</AssemblyVersion>
+    <Version>1.3.4.0</Version>
+    <AssemblyFileVersion></AssemblyFileVersion>
   </PropertyGroup>
 
 </Project>
