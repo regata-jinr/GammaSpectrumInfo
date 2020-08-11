@@ -28,6 +28,7 @@ namespace GSI.UI
                 components.Dispose();
             }
             base.Dispose(disposing);
+            _cts?.Dispose();
         }
 
         #region Windows Form Designer generated code

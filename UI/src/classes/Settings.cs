@@ -415,6 +415,21 @@ namespace GSI
             }
         }
 
+        public static string AcqMod
+        {
+            get
+            {
+                switch (CurrentLanguage)
+                {
+                    case Languages.Russian:
+                        return "Режим набора";
+                    case Languages.English:
+                        return "Acqusition mode";
+                    default: return "";
+                }
+            }
+        }
+
         public static string Type
         {
             get
@@ -512,9 +527,9 @@ namespace GSI
                 switch (CurrentLanguage)
                 {
                     case Languages.Russian:
-                        return "Мертвое время";
+                        return "Мертвое время, %";
                     case Languages.English:
-                        return "Dead time";
+                        return "Dead time, %";
                     default: return "";
                 }
             }
@@ -535,7 +550,21 @@ namespace GSI
             }
         }
 
-        public static string BeginDate
+        public static string AcqStartDate
+        {
+            get
+            {
+                switch (CurrentLanguage)
+                {
+                    case Languages.Russian:
+                        return "Дата начала набора спектра";
+                    case Languages.English:
+                        return "Acquisition start date";
+                    default: return "";
+                }
+            }
+        }
+        public static string IrrBeginDate
         {
             get
             {
@@ -550,7 +579,7 @@ namespace GSI
             }
         }
 
-        public static string EndDate
+        public static string IrrEndDate
         {
             get
             {

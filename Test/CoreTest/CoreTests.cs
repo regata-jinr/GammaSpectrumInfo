@@ -35,8 +35,9 @@ namespace GSI.Core.Test
             Assert.Equal(900, spectra.viewModel.Duration, 2);
             Assert.Equal(0.21, (double)spectra.viewModel.DeadTime, 2);
             Assert.Equal("IRRAD", spectra.viewModel.BuildUpType);
-            Assert.Equal(DateTime.Parse("19.03.2020 9:50"), spectra.viewModel.BeginDate, TimeSpan.FromMinutes(1));
-            Assert.Equal(DateTime.Parse("19.03.2020 9:53"), spectra.viewModel.EndDate, TimeSpan.FromMinutes(1));
+            Assert.Equal(DateTime.Parse("19.03.2020 9:50"), spectra.viewModel.IrrBeginDate, TimeSpan.FromMinutes(1));
+            Assert.Equal(DateTime.Parse("19.03.2020 9:53"), spectra.viewModel.IrrEndDate, TimeSpan.FromMinutes(1));
+            Assert.Equal(DateTime.Parse("19.03.2020 9:58"), spectra.viewModel.AcqStartDate, TimeSpan.FromMinutes(1));
             Assert.Equal("Vergel_K.N.Journal_18", spectra.viewModel.Description);
             Assert.True(spectra.ReadSuccess);
             Assert.True(string.IsNullOrEmpty(spectra.ErrorMessage));

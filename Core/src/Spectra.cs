@@ -19,8 +19,7 @@ namespace GSI.Core
         private IDataAccess _spectra;
 
         public readonly string FileName;
-        public readonly decimal DeadTime;
-        public readonly decimal Duration;
+        public readonly float DeadTime;
 
         public string ErrorMessage;
 
@@ -35,15 +34,12 @@ namespace GSI.Core
                 _spectra.Open(pathToCnf, OpenMode.dReadWrite);
 
                 Sample = new SampleInfo(_spectra);
-                decimal ElapsedLiveTime = 0;
+                float ElapsedLiveTime = 0;
 
-                if (!decimal.TryParse(_spectra.Param[ParamCodes.CAM_X_ELIVE].ToString(), out ElapsedLiveTime))
+                if (!float.TryParse(_spectra.Param[ParamCodes.CAM_X_ELIVE].ToString(), out ElapsedLiveTime))
                     ErrorMessage += "Can't parse ElapsedLiveTime value; ";
                 
-                if (!decimal.TryParse(_spectra.Param[ParamCodes.CAM_X_EREAL].ToString(), out Duration))
-                    ErrorMessage += "Can't parse Duration value; ";
-
-                DeadTime = (Duration == 0) ? 0 : Math.Round(100 * (1 - ElapsedLiveTime / Duration), 2);
+                DeadTime = (Sample.Duration == 0f) ? 0f : (float)Math.Round((100 * (1 - ElapsedLiveTime / Sample.Duration)), 2);
 
                 if (string.IsNullOrEmpty(Sample.ErrorMessage))
                     ReadSuccess = true;
@@ -69,9 +65,9 @@ namespace GSI.Core
         public override string ToString()
         {
             if (ReadSuccess)
-                return String.Format($"{Path.GetFileNameWithoutExtension(FileName),7}{Sample.Id,-15}|{Sample.Title,-5}|{Sample.CollectorName,-15}|{Sample.Type,-5}|{Sample.BeginDate,-20}|{Sample.EndDate,-20}|{Sample.Quantity,-7}|{Sample.Uncertainty,-3}|{Sample.Units,-5}|{Sample.Geometry,-4}|{Sample.Description}|{ReadSuccess,5}");
+                return String.Format($"{Path.GetFileNameWithoutExtension(FileName),7}{Sample.Id,-15}|{Sample.Title,-5}|{Sample.CollectorName,-15}|{Sample.Type,-5}|{Sample.IrrBeginDate,-20}|{Sample.IrrEndDate,-20}|{Sample.AcqStartDate,-20}|{Sample.Quantity,-7}|{Sample.Uncertainty,-3}|{Sample.Units,-5}|{Sample.Geometry,-4}|{Sample.Description}|{ReadSuccess,5}");
 
-            return String.Format($"{Path.GetFileNameWithoutExtension(FileName),7}{Sample.Id,-15}|{Sample.Title,-5}|{Sample.CollectorName,-15}|{Sample.Type,-5}|{Sample.BeginDate,-20}|{Sample.EndDate,-20}|{Sample.Quantity,-7}|{Sample.Uncertainty,-3}|{Sample.Units,-5}|{Sample.Geometry,-4}|{Sample.Description}|{ReadSuccess,5}|{ErrorMessage}");
+            return String.Format($"{Path.GetFileNameWithoutExtension(FileName),7}{Sample.Id,-15}|{Sample.Title,-5}|{Sample.CollectorName,-15}|{Sample.Type,-5}|{Sample.IrrBeginDate,-20}|{Sample.IrrEndDate,-20}|{Sample.AcqStartDate,-20}|{Sample.Quantity,-7}|{Sample.Uncertainty,-3}|{Sample.Units,-5}|{Sample.Geometry,-4}|{Sample.Description}|{ReadSuccess,5}|{ErrorMessage}");
         }
 
         public ViewModel viewModel
@@ -85,15 +81,17 @@ namespace GSI.Core
                     Title         = this.Sample.Title,
                     CollectorName = this.Sample.CollectorName,
                     Type          = this.Sample.Type,
+                    AcqMod       = this.Sample.AcqMod,
                     Quantity      = this.Sample.Quantity,
                     Uncertainty   = this.Sample.Uncertainty,
                     Units         = this.Sample.Units,
                     Geometry      = this.Sample.Geometry,
-                    Duration      = Duration,
+                    Duration      = this.Sample.Duration,
                     DeadTime      = DeadTime,
                     BuildUpType   = this.Sample.BuildUpType,
-                    BeginDate     = this.Sample.BeginDate,
-                    EndDate       = this.Sample.EndDate,
+                    IrrBeginDate  = this.Sample.IrrBeginDate,
+                    IrrEndDate    = this.Sample.IrrEndDate,
+                    AcqStartDate  = this.Sample.AcqStartDate,
                     Description   = this.Sample.Description,
                     ReadSuccess   = this.ReadSuccess,
                     ErrorMessage  = this.ErrorMessage,

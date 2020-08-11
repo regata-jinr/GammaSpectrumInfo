@@ -24,6 +24,7 @@ namespace GSI.UI
     // TODO: find out how to run appx on clean system. test via sandbox and win7 vm
     // TODO: check if dotnet runtime is absent install it. the same for msix
     // TODO: remove old programs and clean pathes
+    // TODO: freeze first two columns
     // TODO: add timestamping to packaging in actions
     // TODO: add sort by any columnt
     // TODO: can user add custom parameters to table by paramCode?

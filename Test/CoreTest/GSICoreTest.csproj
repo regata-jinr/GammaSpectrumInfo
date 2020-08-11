@@ -17,4 +17,10 @@
     <ProjectReference Include="..\..\Core\GSIcore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Interop.CanberraDataAccessLib">
+      <HintPath>..\..\Core\libs\Interop.CanberraDataAccessLib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
