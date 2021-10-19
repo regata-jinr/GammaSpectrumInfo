@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 //[assembly: System.Reflection.Version("1.3.1")]
 
-namespace GSI.UI
+namespace Regata.Desktop.WinForms.GSI
 {
     static class Program
     {

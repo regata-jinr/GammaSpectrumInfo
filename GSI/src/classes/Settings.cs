@@ -14,7 +14,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.IO;
 
-namespace GSI
+namespace Regata.Desktop.WinForms.GSI
 {
     public enum Status { Info, Processing, Success, Canceled };
     public enum Languages { Russian, English };
@@ -185,9 +185,9 @@ namespace GSI
                         switch (CurrentLanguage)
                         {
                             case Languages.Russian:
-                                return "Пуск";
+                                return "Добавить спектры";
                             case Languages.English:
-                                return "Start";
+                                return "Add spectra";
                             default: return "";
                         }
                     case Status.Processing:
@@ -212,18 +212,18 @@ namespace GSI
                         switch (CurrentLanguage)
                         {
                             case Languages.Russian:
-                                return "Пуск";
+                                return "Добавить спектры";
                             case Languages.English:
-                                return "Start";
+                                return "Add spectra";
                             default: return "";
                         }
                     default:
                         switch (CurrentLanguage)
                         {
                             case Languages.Russian:
-                                return "Пуск";
+                                return "Добавить спектры";
                             case Languages.English:
-                                return "Start";
+                                return "Add spectra";
                             default: return "";
                         }
                 }

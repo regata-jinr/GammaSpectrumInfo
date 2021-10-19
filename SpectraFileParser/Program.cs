@@ -1,25 +1,27 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore;
 using System.IO;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using Regata.Core.DataBase;
+using Regata.Core.DataBase.Models;
+using Regata.Core.CNF;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace GSI.Core.SpectraFileParser
 {
     class Program
     {
-        private const string conStr = @"Server=RUMLAB\REGATALOCAL;Database=NAA_DB_TEST;Trusted_Connection=True;";
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             try
             {
                 Console.WriteLine("Initialise spectra parsing");
-                var files = Directory.GetFiles(@"D:\Spectra", "*.cnf", SearchOption.AllDirectories);
-                //files = files.Take(100).ToArray();
-                Console.WriteLine($"Total files number - {files.Length}");
+                var files = Directory.GetFiles(@"D:\Spectra\WrongSLI1510\WrongSLI1510", "*.cnf").ToList();
 
-                files.AsParallel().ForAll(f => ProcessFile(f));
+                Console.WriteLine($"Files number - {files.Count}");
+                foreach (var f in files)
+                {
+                    await ProcessFile(f);
+                }
             }
             catch (Exception e)
             {
@@ -27,135 +29,102 @@ namespace GSI.Core.SpectraFileParser
             }
             Console.WriteLine("Parsing complete");
         }
-      
-        private static void ProcessFile(string file)
-        {
-            //Console.WriteLine($"Processing of file '{file}'");
-            var spectra = new GSI.Core.Spectra(file);
-            var sk = spectra.Sample.Id.Split('-');
-            if (sk.Length != 5) return;
 
-            using (var ic = new InfoContext(conStr))
+        private static async Task ProcessFile(string file)
+        {
+            Console.WriteLine($"Processing of file '{file}'");
+            using (var spectra = new Spectra(file))
             {
-                var oper = spectra.Sample.Description.Split('_')[0].ToLower();
-                var assist = ic.Empls.Where(e => e.LastName.ToLower() == oper).FirstOrDefault();
-                int? pid = null;
-                if (assist != null)
-                    pid = assist.PersonalId;
-
-                ic.Add(new MeasurementInfo
+                var sd = spectra.SpectrumData;
+                //Console.WriteLine(sd);
+                var cc = sd.Id.Split('-')[0];
+                var cn = sd.Id.Split('-')[1];
+                var y = sd.Id.Split('-')[2];
+                var ss = sd.Id.Split('-')[3];
+                var si = sd.Id.Split('-')[4];
+                var sn = sd.Title.Split('-')[1];
+                var f = "";
+                using (var r = new RegataContext())
                 {
-                    CountryCode = sk[0],
-                    ClientNumber = sk[1],
-                    Year = sk[2],
-                    SetNumber = sk[3],
-                    SetIndex = sk[4],
-                    SampleNumber = spectra.Sample.Title.Split('-')[1],
-                    Type = spectra.Sample.Type,
-                    AcqMode = spectra.Sample.AcqMod,
-                    Height = spectra.Sample.Geometry,
-                    DateTimeStart = spectra.Sample.AcqStartDate,
-                    Duration = (int)spectra.Sample.Duration,
-                    DeadTime = spectra.DeadTime,
-                    DateTimeFinish = null,
-                    FileSpectra = Path.GetFileNameWithoutExtension(file),
-                    Detector = $"D{Path.GetFileName(file).Substring(0, 1)}",
-                    Token = null,
-                    Assistant = pid,
-                    Note = null
-                });
-                ic.SaveChanges();
+                    var ir = r.Irradiations.Where(irr => irr.CountryCode == cc &&
+                                                         irr.ClientNumber == cn &&
+                                                         irr.Year == y &&
+                                                         irr.SetNumber == ss &&
+                                                         irr.SetIndex == si &&
+                                                         irr.SampleNumber == sn
+                                                   ).FirstOrDefault();
+
+
+
+                    var mi = new Measurement
+                    {
+                        CountryCode = sd.Id.Split('-')[0],
+                        ClientNumber = sd.Id.Split('-')[1],
+                        Year = sd.Id.Split('-')[2],
+                        SetNumber = sd.Id.Split('-')[3],
+                        SetIndex = sd.Id.Split('-')[4],
+                        SampleNumber = sd.Title.Split('-')[1],
+                        Type = 0,
+                        AcqMode = 2,
+                        Height = 20,
+                        IrradiationId = ir.Id,
+                        DateTimeStart = sd.AcqStartDate,
+                        Duration = (int)sd.Duration,
+                        DeadTime = sd.DeadTime,
+                        DateTimeFinish = sd.AcqStartDate.Value.AddSeconds(sd.Duration),
+                        Detector = $"D{Path.GetFileName(file).Substring(0, 1)}",
+                        FileSpectra = await GenerateSpectraFileNameFromDBAsync($"D{Path.GetFileName(file).Substring(0, 1)}", 0),
+                        Assistant = 133887,
+                        Note = null,
+                        RegId = 932
+                    };
+
+                    //Console.WriteLine($"{mi}-{mi.FileSpectra}-{mi.IrradiationId}");
+                    f = mi.FileSpectra;
+                    r.Measurements.Add(mi);
+                    await r.SaveChangesAsync();
+                    //Console.WriteLine($"{file}--->{Path.Combine(Path.GetDirectoryName(file), "new", $"{mi.FileSpectra}.cnf")}");
+                }
+                File.Copy(file, Path.Combine(Path.GetDirectoryName(file),"new", $"{f}.cnf"), true);
+
             }
-        }
-    }
 
-    static class ObjectHelper
-    {
-        public static void Dump<T>(this T x, string prem)
+
+        }
+
+        public static async Task<string> GenerateSpectraFileNameFromDBAsync(string dName, int type)
         {
-            Console.WriteLine($"{prem} {x}");
+            return await Task.Run(async () =>
+            {
+                    using (var r = new RegataContext())
+                    {
+                        var spectras = r.Measurements.Where(m => (
+                                                                   m.FileSpectra.Length == 7 &&
+                                                                   m.Type == type &&
+                                                                   m.FileSpectra.Substring(0, 1) == dName.Substring(1, 1)
+                                                                )
+                                                        )
+                                                  .Select(m => new
+                                                  {
+                                                      FileNumber = m.FileSpectra.Substring(2, 5)
+                                                  }
+                                                         )
+                                                  .ToArray();
+
+                        int maxNumber = spectras.Where(s => int.TryParse(s.FileNumber, out _)).Select(s => int.Parse(s.FileNumber)).Max();
+
+
+                        return $"{dName.Substring(1, 1)}{type}{(++maxNumber).ToString("D5")}";
+                    }
+             
+            });
         }
-    }
 
-    public class MeasurementInfo 
-    {
-        [Key]
-        public int Id { get; set; }
-        [Required]
-        public int? IrradiationId { get; set; }
-        [Required]
-        public int? MRegId { get; set; }
-        [Required]
-        public string CountryCode { get; set; }
-        [Required]
-        public string ClientNumber { get; set; }
-        [Required]
-        public string Year { get; set; }
-        [Required]
-        public string SetNumber { get; set; }
-        [Required]
-        public string SetIndex { get; set; }
-        [Required]
-        public string SampleNumber { get; set; }
-        [Required]
-        public string Type { get; set; }
-        public string AcqMode { get; set; }
-        public float? Height { get; set; }
-        public DateTime? DateTimeStart { get; set; }
-        public int? Duration { get; set; }
-        public float? DeadTime { get; set; }
-        public DateTime? DateTimeFinish { get; set; }
-        public string FileSpectra { get; set; }
-        public string Detector { get; set; }
-        public string Token { get; set; }
-        public int? Assistant { get; set; }
-        public string Note { get; set; }
-
-
-        [NotMapped]
-        public string SetKey => $"{CountryCode}-{ClientNumber}-{Year}-{SetNumber}-{SetIndex}";
-
-        [NotMapped]
-        public string SampleKey => $"{SetIndex}-{SampleNumber}";
-        public override string ToString() => $"{SetKey}-{SampleNumber}";
-    }
-
-    [Table("Staff")]
-    public class Staff
-    {
-        public int PersonalId { get; set; }
-        [Required]
-        public string LastName { get; set; }
-    }
-
-
-    public class InfoContext : DbContext
-    {
-        public DbSet<MeasurementInfo> Measurements { get; set; }
-        public DbSet<Staff> Empls { get; set; }
-
-        private readonly string _conString;
-
-        public InfoContext(string conStr) : base()
+        private static bool IsNumber(string str)
         {
-            _conString = conStr;
+            return int.TryParse(str, out _);
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(_conString);
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<MeasurementInfo>()
-                .HasIndex(c => c.FileSpectra)
-                .IsUnique();
-
-            modelBuilder.Entity<Staff>()
-               .HasKey(c => c.PersonalId);
-
-        }
     }
+
 }
-

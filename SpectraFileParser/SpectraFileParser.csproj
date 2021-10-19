@@ -1,20 +1,37 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <PlatformTarget>x86</PlatformTarget>
-    <Platforms>AnyCPU;x86</Platforms>
+	<OutputType>Exe</OutputType>
+	<TargetFramework>net5.0-windows</TargetFramework>
+	<PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CredentialManagement" Version="1.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
-  </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Core\GSIcore.csproj" />
+
+	<ItemGroup>
+		<PackageReference Include="AdysTech.CredentialManager" Version="2.3.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.7" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+		<PackageReference Include="NLog" Version="4.7.10" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="base">
+		  <HintPath>$(ARTIFACTS)\$(Configuration)\base\base.dll</HintPath>
+	  </Reference>
+	  <Reference Include="cloud">
+		  <HintPath>$(ARTIFACTS)\$(Configuration)\cloud\Cloud.dll</HintPath>
+	  </Reference>
+	  <Reference Include="cnf">
+		  <HintPath>$(ARTIFACTS)\$(Configuration)\cnf\cnf.dll</HintPath>
+	  </Reference>
+	
+	  <None Include="$(ARTIFACTS)\$(Configuration)\base\targets.json" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+	  <None Include="$(ARTIFACTS)\$(Configuration)\base\NLog.config" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
   </ItemGroup>
 
 </Project>

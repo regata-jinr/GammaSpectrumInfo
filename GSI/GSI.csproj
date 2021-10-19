@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net5.0-windows</TargetFramework>
+		<PlatformTarget>x86</PlatformTarget>
+		<UseWindowsForms>true</UseWindowsForms>
+		<RuntimeIdentifier>win-x86</RuntimeIdentifier>
+		<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+		<Platforms>AnyCPU;x86</Platforms>
+		<StartupObject>Regata.Desktop.WinForms.GSI.Program</StartupObject>
+		<RootNamespace>Regata.Desktop.WinForms.GSI</RootNamespace>
+		<AssemblyName>GammaSpectrumInfo</AssemblyName>
+		<ApplicationIcon>GammaSpectrumInfo.ico</ApplicationIcon>
+		<AssemblyFileVersion>1.3.4.0</AssemblyFileVersion>
+		<AssemblyVersion>1.3.4.0</AssemblyVersion>
+		<Version>1.3.4.0</Version>
+		<AssemblyFileVersion></AssemblyFileVersion>
+		<PublishSingleFile>true</PublishSingleFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Reference Include="base">
+			<HintPath>$(ARTIFACTS)\$(Configuration)\cnf\cnf.dll</HintPath>
+		</Reference>
+	
+		<None Include="$(ARTIFACTS)\..\libs\Interop.CanberraDataAccessLib.dll" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+
+		<None Update="GammaSpectrumInfo.ico">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<Folder Include="Resources\" />
+	<Compile Update="src\forms\FaceForm - Copy.Designer.cs">
+	  <DependentUpon>FaceForm.resx</DependentUpon>
+	  <DesignTime>True</DesignTime>
+	  <AutoGen>True</AutoGen>
+	</Compile>
+
+	<Compile Update="src\forms\FaceForm.Designer.cs">
+	  <DesignTime>True</DesignTime>
+	  <AutoGen>True</AutoGen>
+	  <DependentUpon>FaceForm.resx</DependentUpon>
+	</Compile>
+
+	<EmbeddedResource Update="src\forms\FaceForm.resx">
+	  <Generator>PublicResXFileCodeGenerator</Generator>
+	  <LastGenOutput>FaceForm.Designer.cs</LastGenOutput>
+	</EmbeddedResource>
+  </ItemGroup>
+
+
+</Project>

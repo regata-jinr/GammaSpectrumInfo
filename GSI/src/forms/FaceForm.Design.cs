@@ -1,47 +1,24 @@
 ﻿/***************************************************************************
  *                                                                         *
  *                                                                         *
- * Copyright(c) 2020, REGATA Experiment at FLNP|JINR                       *
+ * Copyright(c) 2020-2021, REGATA Experiment at FLNP|JINR                  *
  * Author: [Boris Rumyantsev](mailto:bdrum@jinr.ru)                        *
- * All rights reserved                                                     *
  *                                                                         *
+ * The REGATA Experiment team license this file to you under the           *
+ * GNU GENERAL PUBLIC LICENSE                                              *
  *                                                                         *
  ***************************************************************************/
 
-namespace GSI.UI
+namespace Regata.Desktop.WinForms.GSI
 {
     partial class FaceForm
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
-
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-            _cts?.Dispose();
-        }
-
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
+        
+        private void InitializeComponents()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FaceForm));
             this.FaceFormMenuStrip = new System.Windows.Forms.MenuStrip();
-            this.ToolStripMenuItemMenu = new System.Windows.Forms.ToolStripMenuItem();
+            //this.ToolStripMenuItemMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemMenuLang = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemMenuLangRus = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemMenuLangEng = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,9 +41,8 @@ namespace GSI.UI
             // FaceFormMenuStrip
             // 
             this.FaceFormMenuStrip.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FaceFormMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ToolStripMenuItemMenu,
-            this.ToolStripMenuItemView});
+            this.FaceFormMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {ToolStripMenuItemMenuChoseSpectra,
+            ToolStripMenuItemView, ToolStripMenuItemMenuLang});
             this.FaceFormMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.FaceFormMenuStrip.Name = "FaceFormMenuStrip";
             this.FaceFormMenuStrip.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
@@ -75,14 +51,14 @@ namespace GSI.UI
             this.FaceFormMenuStrip.TabIndex = 0;
             this.FaceFormMenuStrip.Text = "FaceFormMenuStrip";
             // 
-            // ToolStripMenuItemMenu
-            // 
-            this.ToolStripMenuItemMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ToolStripMenuItemMenuLang,
-            this.ToolStripMenuItemMenuChoseSpectra});
-            this.ToolStripMenuItemMenu.Name = "ToolStripMenuItemMenu";
-            this.ToolStripMenuItemMenu.Size = new System.Drawing.Size(63, 24);
-            this.ToolStripMenuItemMenu.Text = "Меню";
+            //// ToolStripMenuItemMenu
+            //// 
+            //this.ToolStripMenuItemMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            //this.ToolStripMenuItemMenuLang,
+            //this.ToolStripMenuItemMenuChoseSpectra});
+            //this.ToolStripMenuItemMenu.Name = "ToolStripMenuItemMenu";
+            //this.ToolStripMenuItemMenu.Size = new System.Drawing.Size(63, 24);
+            //this.ToolStripMenuItemMenu.Text = "Меню";
             // 
             // ToolStripMenuItemLang
             // 
@@ -149,18 +125,18 @@ namespace GSI.UI
             // FaceFormButtonStart
             // 
             this.FaceFormButtonStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.FaceFormButtonStart.Location = new System.Drawing.Point(1062, 40);
+            this.FaceFormButtonStart.Location = new System.Drawing.Point(930, 40);
             this.FaceFormButtonStart.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.FaceFormButtonStart.Name = "FaceFormButtonStart";
-            this.FaceFormButtonStart.Size = new System.Drawing.Size(120, 35);
+            this.FaceFormButtonStart.Size = new System.Drawing.Size(250, 35);
             this.FaceFormButtonStart.TabIndex = 2;
-            this.FaceFormButtonStart.Text = "Пуск";
+            this.FaceFormButtonStart.Text = "Выбрать спектры";
             this.FaceFormButtonStart.UseVisualStyleBackColor = true;
             // 
             // FaceFormButtonCancel
             // 
             this.FaceFormButtonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.FaceFormButtonCancel.Location = new System.Drawing.Point(934, 40);
+            this.FaceFormButtonCancel.Location = new System.Drawing.Point(800, 40);
             this.FaceFormButtonCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.FaceFormButtonCancel.Name = "FaceFormButtonCancel";
             this.FaceFormButtonCancel.Size = new System.Drawing.Size(120, 35);
@@ -245,10 +221,9 @@ namespace GSI.UI
 
         }
 
-        #endregion
 
         private System.Windows.Forms.MenuStrip FaceFormMenuStrip;
-        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemMenu;
+        //private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemMenu;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemMenuLang;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemMenuLangRus;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemMenuLangEng;

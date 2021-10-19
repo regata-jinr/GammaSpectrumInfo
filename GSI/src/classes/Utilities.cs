@@ -11,7 +11,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace GSI
+namespace Regata.Desktop.WinForms.GSI
 {
     internal static class Utilities
     {
